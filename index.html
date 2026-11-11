@@ -1,983 +1,492 @@
 <!DOCTYPE html>
-
 <html class="light" lang="en">
-
 <head>
-
-    <meta charset="utf-8"/>
-
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-
-    <title>HydroSense Pro - Industrial Water Level Monitoring</title>
-
-
-
-    <!-- Google Fonts -->
-
-    <link href="https\://fonts.googleapis.com" rel="preconnect"/>
-
-    <link crossorigin="" href="https\://fonts.gstatic.com" rel="preconnect"/>
-
-    <link href="https\://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght\@400;600;700;800&amp;family=Inter:wght\@400;500;600&amp;display=swap" rel="stylesheet"/>
-
-
-
-    <!-- Material Symbols -->
-
-    <link href="https\://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL\@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-
-
-
-    <!-- Tailwind CSS -->
-
-    <script src="https\://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-
-
-    <!-- Chart.js -->
-
-    <script src="https\://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
-    <!-- MQTT.js (Wajib ditambahkan untuk WebSocket) -->
-
-    <script src="https\://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-
-
-
-    <script id="tailwind-config">
-
-        tailwind.config = {
-
-            darkMode: "class",
-
-            theme: {
-
-                extend: {
-
-                    "colors": {
-
-                        "background": "#f7f9fb",
-
-                        "secondary-container": "#d0e1fb",
-
-                        "surface-bright": "#f7f9fb",
-
-                        "on-tertiary": "#ffffff",
-
-                        "inverse-primary": "#b4c5ff",
-
-                        "outline": "#737686",
-
-                        "on-primary-container": "#eeefff",
-
-                        "on-secondary-container": "#54647a",
-
-                        "primary": "#004ac6",
-
-                        "on-background": "#191c1e",
-
-                        "secondary": "#505f76",
-
-                        "on-surface-variant": "#434655",
-
-                        "surface-tint": "#0053db",
-
-                        "on-primary-fixed": "#00174b",
-
-                        "surface-container": "#eceef0",
-
-                        "on-error-container": "#93000a",
-
-                        "inverse-on-surface": "#eff1f3",
-
-                        "on-primary": "#ffffff",
-
-                        "surface-container-low": "#f2f4f6",
-
-                        "secondary-fixed": "#d3e4fe",
-
-                        "surface-container-highest": "#e0e3e5",
-
-                        "error": "#ba1a1a",
-
-                        "outline-variant": "#c3c6d7",
-
-                        "on-surface": "#191c1e",
-
-                        "on-error": "#ffffff",
-
-                        "on-secondary-fixed": "#0b1c30",
-
-                        "error-container": "#ffdad6",
-
-                        "on-secondary": "#ffffff",
-
-                        "primary-container": "#2563eb",
-
-                        "surface-container-high": "#e6e8ea",
-
-                        "surface-variant": "#e0e3e5",
-
-                        "surface": "#f7f9fb",
-
-                        "primary-fixed": "#dbe1ff"
-
-                    },
-
-                    "spacing": {
-
-                        "stack-sm": "4px",
-
-                        "stack-md": "12px",
-
-                        "gutter": "24px",
-
-                        "base": "8px",
-
-                        "stack-lg": "24px",
-
-                        "container-padding-mobile": "16px",
-
-                        "container-padding-desktop": "32px"
-
-                    },
-
-                    "fontFamily": {
-
-                        "headline-md": ["Hanken Grotesk"],
-
-                        "headline-lg": ["Hanken Grotesk"],
-
-                        "headline-lg-mobile": ["Hanken Grotesk"],
-
-                        "body-md": ["Inter"],
-
-                        "label-md": ["Inter"],
-
-                        "body-sm": ["Inter"],
-
-                        "body-lg": ["Inter"],
-
-                        "headline-xl": ["Hanken Grotesk"],
-
-                        "label-sm": ["Inter"]
-
-                    },
-
-                    "fontSize": {
-
-                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
-
-                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
-
-                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
-
-                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-
-                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
-
-                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
-
-                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-
-                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-
-                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }]
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    </script>
-
-    <style>
-
-        body { background-color: #f7f9fb; }
-
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-
-        ::-webkit-scrollbar-track { background: #f7f9fb; }
-
-        ::-webkit-scrollbar-thumb { background: #c3c6d7; border-radius: 4px; }
-
-        ::-webkit-scrollbar-thumb:hover { background: #737686; }
-
-        @keyframes shimmer { 100% { transform: translateX(100%); } }
-
-    </style>
-
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>HydroSense Pro - Industrial Water Level Monitoring</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- MQTT.js (Wajib ditambahkan untuk WebSocket) -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#f7f9fb",
+                        "secondary-container": "#d0e1fb",
+                        "surface-bright": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "outline": "#737686",
+                        "on-primary-container": "#eeefff",
+                        "on-secondary-container": "#54647a",
+                        "primary": "#004ac6",
+                        "on-background": "#191c1e",
+                        "secondary": "#505f76",
+                        "on-surface-variant": "#434655",
+                        "surface-tint": "#0053db",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container": "#eceef0",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-highest": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c3c6d7",
+                        "on-surface": "#191c1e",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#2563eb",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-variant": "#e0e3e5",
+                        "surface": "#f7f9fb",
+                        "primary-fixed": "#dbe1ff"
+                    },
+                    "spacing": {
+                        "stack-sm": "4px",
+                        "stack-md": "12px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "stack-lg": "24px",
+                        "container-padding-mobile": "16px",
+                        "container-padding-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Hanken Grotesk"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f7f9fb; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f7f9fb; }
+        ::-webkit-scrollbar-thumb { background: #c3c6d7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #737686; }
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
+    </style>
 </head>
-
 <body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col lg:flex-row">
-
-    <audio id="alertSound" preload="auto" src="https\://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"></audio>
-
-
-
-    <!-- SideNavBar (Desktop) -->
-
-    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-[260px] py-stack-lg px-base bg-white border-r border-outline-variant shadow-md z-40">
-
-        <div class="mb-8 px-4 flex items-center gap-3">
-
-            <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold font-headline-md text-headline-md shadow-sm">HS</div>
-
-            <div>
-
-                <h1 class="text-headline-md font-headline-md font-bold text-primary truncate">HydroSense Pro</h1>
-
-                <p class="text-label-md font-label-md text-secondary truncate">Station 01</p>
-
-            </div>
-
-        </div>
-
-        <div class="flex-1 flex flex-col gap-2">
-
-            <a class="flex items-center gap-3 px-4 py-3 bg-secondary-fixed text-on-secondary-fixed rounded-lg transition-all text-label-md font-label-md group cursor-pointer" id="navOverviewBtn">
-
-                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
-
-                <span>Overview</span>
-
-            </a>
-
-            <a class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-container transition-all rounded-lg text-label-md font-label-md group cursor-pointer" id="navMqttConfigBtn">
-
-                <span class="material-symbols-outlined text-[20px]">settings_input_component</span>
-
-                <span>MQTT Config</span>
-
-            </a>
-
-        </div>
-
-        <div class="mt-auto flex flex-col gap-2 pt-4 border-t border-outline-variant">
-
-            <button class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-label-md text-label-md hover:opacity-90 shadow-sm">
-
-                <span class="material-symbols-outlined text-[18px]">download</span> Export Data
-
-            </button>
-
-        </div>
-
-    </nav>
-
-
-
-    <!-- TopAppBar -->
-
-    <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-16 bg-surface border-b border-outline-variant shadow-sm lg:pl-[292px]">
-
-        <div class="flex items-center gap-2 lg:hidden">
-
-            <span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">water_drop</span>
-
-            <h1 class="text-headline-md font-headline-md font-extrabold text-primary truncate">HydroSense Pro</h1>
-
-        </div>
-
-        <div class="hidden lg:flex flex-col">
-
-            <h2 class="text-headline-md font-headline-md font-semibold text-on-surface">Water Level Monitoring System</h2>
-
-            <p class="text-label-md font-label-md text-secondary">Realtime Monitoring via ESP32 &amp; HiveMQ</p>
-
-        </div>
-
-        <div class="flex items-center gap-4">
-
-            <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-outline-variant shadow-sm">
-
-                <div class="relative flex h-3 w-3">
-
-                    <span id="connPulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
-
-                    <span id="connDot" class="relative inline-flex rounded-full h-3 w-3 bg-[#10b981]"></span>
-
-                </div>
-
-                <span id="connText" class="text-label-sm font-label-sm text-secondary uppercase tracking-wider">Connecting...</span>
-
-            </div>
-
-            <button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container" id="muteToggle" title="Mute/Unmute Alert Sound">
-
-                <span class="material-symbols-outlined" id="muteIcon">volume_up</span>
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-
-    <!-- Main Content Canvas -->
-
-    <main class="flex-1 w-full pt-20 pb-24 lg:pb-8 px-4 lg:px-8 lg:ml-[260px] max-w-[1600px] mx-auto">
-
-        <div class="flex flex-col gap-gutter w-full" id="viewOverview">
-
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
-
-                <!-- Current Water Level Card -->
-
-                <div class="col-span-1 md:col-span-8 bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col relative overflow-hidden group">
-
-                    <div class="flex justify-between items-start mb-6 z-10 relative">
-
-                        <div>
-
-                            <h3 class="text-body-md font-body-md text-secondary font-medium">Current Water Level</h3>
-
-                            <p class="text-label-sm font-label-sm text-outline mt-1">Sensor: Mini Lidar TOF VL53L0X</p>
-
-                        </div>
-
-                        <span class="material-symbols-outlined text-outline-variant">waves</span>
-
-                    </div>
-
-                    <div class="flex-1 flex flex-col lg:flex-row items-center justify-center gap-8 z-10 relative">
-
-                        <div class="text-center lg:text-left flex flex-col items-center lg:items-start">
-
-                            <div class="flex items-baseline gap-2">
-
-                                <span class="text-[72px] lg:text-[96px] leading-none font-headline-xl font-bold text-primary tracking-tighter" id="currentLevelDisplay">0</span>
-
-                                <span class="text-headline-md font-headline-md text-secondary font-semibold">cm</span>
-
-                            </div>
-
-                        </div>
-
-                        <div class="w-full max-w-[300px] flex flex-col gap-2">
-
-                            <div class="flex justify-between text-label-sm font-label-sm text-secondary">
-
-                                <span>0 cm</span>
-
-                                <span id="labelMaxScale">200 cm (Max)</span>
-
-                            </div>
-
-                            <div class="h-6 w-full bg-surface-container rounded-full overflow-hidden relative shadow-inner">
-
-                                <div class="h-full bg-primary-container rounded-full transition-all duration-1000 ease-in-out w-[0%] relative overflow-hidden" id="levelProgressBar">
-
-                                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="flex justify-between text-label-sm font-label-sm mt-1">
-
-                                <span class="text-[#10b981] font-semibold" id="labelAman">Aman (< 100)</span>
-
-                                <span class="text-[#f59e0b] font-semibold" id="labelSiaga">Siaga (100-150)</span>
-
-                                <span class="text-error font-semibold" id="labelBahaya">Bahaya (> 150)</span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- System Status Card -->
-
-                <div class="col-span-1 md:col-span-4 bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col justify-between">
-
-                    <div class="flex justify-between items-start mb-4">
-
-                        <h3 class="text-body-md font-body-md text-secondary font-medium">System Status</h3>
-
-                        <span class="material-symbols-outlined text-outline-variant">info</span>
-
-                    </div>
-
-                    <div class="flex-1 flex flex-col items-center justify-center text-center">
-
-                        <div class="w-24 h-24 rounded-full bg-[#10b981]/10 flex items-center justify-center mb-4" id="systemStatusIconBg">
-
-                            <span class="material-symbols-outlined text-[48px] text-[#10b981]" id="systemStatusIcon" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-
-                        </div>
-
-                        <h4 class="text-headline-lg font-headline-lg text-[#10b981]" id="systemStatusText">Aman</h4>
-
-                        <p class="text-body-sm font-body-sm text-secondary mt-2" id="systemStatusDesc">Waiting for sensor data...</p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-
-                <!-- Realtime Chart -->
-
-                <div class="col-span-1 lg:col-span-2 bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col h-[400px]">
-
-                    <div class="flex justify-between items-center mb-4 pb-4 border-b border-surface-container">
-
-                        <div>
-
-                            <h3 class="text-body-md font-body-md text-on-surface font-semibold">Live Telemetry</h3>
-
-                            <p class="text-label-sm font-label-sm text-secondary">Historical level</p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="flex-1 w-full relative">
-
-                        <canvas id="waterLevelChart"></canvas>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- Threshold Settings -->
-
-                <div class="col-span-1 bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col">
-
-                    <div class="flex justify-between items-center mb-6 pb-4 border-b border-surface-container">
-
-                        <h3 class="text-body-md font-body-md text-on-surface font-semibold">Threshold Settings</h3>
-
-                        <span class="material-symbols-outlined text-outline-variant">tune</span>
-
-                    </div>
-
-                    <form class="flex-1 flex flex-col gap-5">
-
-                        <div class="relative">
-
-                            <label class="block text-label-md font-label-md text-secondary mb-1">Aman (Safe) Max (cm)</label>
-
-                            <div class="relative flex items-center">
-
-                                <span class="absolute left-3 w-3 h-3 rounded-full bg-[#10b981]"></span>
-
-                                <input class="block w-full pl-9 pr-12 py-2 border rounded-lg focus:ring-4 focus:ring-primary/20 focus:border-primary" id="thresholdAman" type="number" value="100"/>
-
-                            </div>
-
-                        </div>
-
-                        <div class="relative">
-
-                            <label class="block text-label-md font-label-md text-secondary mb-1">Siaga (Warning) Max (cm)</label>
-
-                            <div class="relative flex items-center">
-
-                                <span class="absolute left-3 w-3 h-3 rounded-full bg-[#f59e0b]"></span>
-
-                                <input class="block w-full pl-9 pr-12 py-2 border rounded-lg focus:ring-4 focus:ring-primary/20 focus:border-primary" id="thresholdSiaga" type="number" value="150"/>
-
-                            </div>
-
-                        </div>
-
-                        <div class="relative">
-
-                            <label class="block text-label-md font-label-md text-secondary mb-1">Bahaya (Danger) Limit (cm)</label>
-
-                            <div class="relative flex items-center">
-
-                                <span class="absolute left-3 w-3 h-3 rounded-full bg-error"></span>
-
-                                <input class="block w-full pl-9 pr-12 py-2 border rounded-lg focus:ring-4 focus:ring-primary/20 focus:border-primary" id="thresholdBahaya" type="number" value="200"/>
-
-                            </div>
-
-                        </div>
-
-                        <button class="mt-auto w-full flex justify-center items-center gap-2 bg-[#2563EB] text-white py-2.5 px-4 rounded-lg font-medium hover:bg-primary-fixed-variant shadow-sm" id="saveThresholdsBtn" type="button">
-
-                            <span class="material-symbols-outlined text-[18px]">save</span> Save Thresholds
-
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- MQTT Config View -->
-
-        <div class="hidden flex-col gap-gutter w-full max-w-2xl mx-auto" id="viewMqttConfig">
-
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col">
-
-                <div class="flex justify-between items-center mb-6 pb-4 border-b border-surface-container">
-
-                    <h3 class="text-body-md font-body-md text-on-surface font-semibold">MQTT Configuration</h3>
-
-                    <span class="material-symbols-outlined text-outline-variant">settings_input_component</span>
-
-                </div>
-
-                <div class="p-4 bg-surface-container rounded text-body-sm text-secondary">
-
-                    <b>Note:</b> Kredensial hardcoded pada index.html. Untuk produksi, mohon pindahkan ke ENV atau sisi server.
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
-
-
-
-    <!-- BottomNavBar (Mobile Only) -->
-
-    <nav class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 shadow-sm bg-white pb-safe">
-
-        <a class="flex flex-col items-center justify-center text-primary rounded-full p-2 min-w-[64px]" href="#">
-
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
-
-        </a>
-
-    </nav>
-
-
-
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function() {
-
-            // Audio setup
-
-            const alertSound = document.getElementById('alertSound');
-
-            const muteToggle = document.getElementById('muteToggle');
-
-            const muteIcon = document.getElementById('muteIcon');
-
-            let isMuted = false;
-
-            let bahayaStateActive = false;
-
-
-
-            muteToggle.addEventListener('click', () => {
-
-                isMuted = !isMuted;
-
-                muteIcon.textContent = isMuted ? 'volume_off' : 'volume_up';
-
-                if (isMuted) alertSound.pause();
-
-            });
-
-
-
-            // Koneksi MQTT Websocket
-
-            const brokerUrl = 'wss\://88534bafaf374fcfaa67af7757feb0fa.s1.eu.hivemq.cloud:8884/mqtt';
-
-            const mqttOptions = {
-
-                clientId: 'web_client_' + Math.random().toString(16).substr(2, 8),
-
-                username: 'esp32_ews',
-
-                password: 'GANTI_DENGAN_PASSWORD_MQTT_BARU',
-
-                clean: true,
-
-                reconnectPeriod: 5000,
-
-            };
-
-
-
-            const client = mqtt.connect(brokerUrl, mqttOptions);
-
-            const connText = document.getElementById('connText');
-
-            const connPulse = document.getElementById('connPulse');
-
-            const connDot = document.getElementById('connDot');
-
-
-
-            // Setup Chart.js
-
-            const ctx = document.getElementById('waterLevelChart').getContext('2d');
-
-            const initialData = Array(30).fill(0);
-
-            const labels = Array.from({length: 30}, (_, i) => `-${30-i}s`);
-
-
-
-            const waterChart = new Chart(ctx, {
-
-                type: 'line',
-
-                data: {
-
-                    labels: labels,
-
-                    datasets: [{
-
-                        label: 'Water Level (cm)',
-
-                        data: initialData,
-
-                        borderColor: '#2563EB',
-
-                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
-
-                        borderWidth: 2,
-
-                        tension: 0.4,
-
-                        fill: true,
-
-                        pointRadius: 0
-
-                    }]
-
-                },
-
-                options: {
-
-                    responsive: true,
-
-                    maintainAspectRatio: false,
-
-                    plugins: { legend: { display: false } },
-
-                    scales: {
-
-                        x: { grid: { display: false } },
-
-                        y: { min: 0, max: 200 }
-
-                    }
-
-                }
-
-            });
-
-
-
-            // MQTT Logic
-
-            client.on('connect', () => {
-
-                console.log('Terhubung ke HiveMQ Cloud!');
-
-                connText.textContent = 'Connected';
-
-                connText.className = 'text-label-sm font-label-sm text-[#10b981] uppercase tracking-wider';
-
-                connPulse.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75';
-
-                connDot.className = 'relative inline-flex rounded-full h-3 w-3 bg-[#10b981]';
-
-
-
-                client.subscribe('ews/banjir/level');
-
-                client.subscribe('ews/banjir/threshold/state');
-
-            });
-
-
-
-            client.on('error', (err) => {
-
-                console.error('MQTT Error:', err);
-
-                connText.textContent = 'Error';
-
-                connPulse.className = 'hidden';
-
-                connDot.className = 'relative inline-flex rounded-full h-3 w-3 bg-error';
-
-            });
-
-
-
-            client.on('message', (topic, message) => {
-
-                try {
-
-                    const payload = JSON.parse(message.toString());
-
-                    if (topic === 'ews/banjir/level') {
-
-                        updateDashboardUI(payload);
-
-                    } else if (topic === 'ews/banjir/threshold/state') {
-
-                        updateThresholdUI(payload);
-
-                    }
-
-                } catch(e) {
-
-                    console.error("Parse error", e);
-
-                }
-
-            });
-
-
-
-            function updateDashboardUI(data) {
-
-                const level = data.level;
-
-                const bahayaVal = data.bahaya;
-
-                const siagaVal = data.siaga;
-
-
-
-                document.getElementById('currentLevelDisplay').innerText = level;
-
-
-
-                waterChart.data.datasets[0].data.shift();
-
-                waterChart.data.datasets[0].data.push(level);
-
-                let d = new Date();
-
-                waterChart.data.labels.shift();
-
-                waterChart.data.labels.push(`${d.getHours()}:${d.getMinutes() < 10 ? '0' : ''}${d.getMinutes()}:${d.getSeconds()}`);
-
-                waterChart.update('none');
-
-
-
-                let percentage = (level / bahayaVal) \* 100;
-
-                const bar = document.getElementById('levelProgressBar');
-
-                bar.style.width = `${Math.min(percentage, 100)}%`;
-
-
-
-                const iconBg = document.getElementById('systemStatusIconBg');
-
-                const icon = document.getElementById('systemStatusIcon');
-
-                const text = document.getElementById('systemStatusText');
-
-                const desc = document.getElementById('systemStatusDesc');
-
-
-
-                if (level >= bahayaVal) {
-
-                    bar.className = 'h-full bg-error rounded-full transition-all duration-1000 w-full relative overflow-hidden';
-
-                    iconBg.className = 'w-24 h-24 rounded-full bg-error/10 flex items-center justify-center mb-4 animate-pulse';
-
-                    icon.className = 'material-symbols-outlined text-[48px] text-error';
-
-                    icon.textContent = 'warning';
-
-                    text.className = 'text-headline-lg font-headline-lg text-error';
-
-                    text.textContent = 'Bahaya';
-
-                    desc.textContent = 'Kritis: Level air melebihi batas bahaya!';
-
-
-
-                    if (!bahayaStateActive && !isMuted) {
-
-                        bahayaStateActive = true;
-
-                        alertSound.play().catch(e => console.log('Audio butuh interaksi user pertama kali'));
-
-                    }
-
-                } else if (level >= siagaVal) {
-
-                    bar.className = 'h-full bg-[#f59e0b] rounded-full transition-all duration-1000 w-full relative overflow-hidden';
-
-                    iconBg.className = 'w-24 h-24 rounded-full bg-[#f59e0b]/10 flex items-center justify-center mb-4';
-
-                    icon.className = 'material-symbols-outlined text-[48px] text-[#f59e0b]';
-
-                    icon.textContent = 'error';
-
-                    text.className = 'text-headline-lg font-headline-lg text-[#f59e0b]';
-
-                    text.textContent = 'Siaga';
-
-                    desc.textContent = 'Peringatan: Level air naik mendekati batas bahaya.';
-
-
-
-                    bahayaStateActive = false;
-
-                    alertSound.pause();
-
-                } else {
-
-                    bar.className = 'h-full bg-primary-container rounded-full transition-all duration-1000 w-full relative overflow-hidden';
-
-                    iconBg.className = 'w-24 h-24 rounded-full bg-[#10b981]/10 flex items-center justify-center mb-4';
-
-                    icon.className = 'material-symbols-outlined text-[48px] text-[#10b981]';
-
-                    icon.textContent = 'check_circle';
-
-                    text.className = 'text-headline-lg font-headline-lg text-[#10b981]';
-
-                    text.textContent = 'Aman';
-
-                    desc.textContent = 'Semua sistem normal. Level air dalam batas aman.';
-
-
-
-                    bahayaStateActive = false;
-
-                    alertSound.pause();
-
-                }
-
-            }
-
-
-
-            document.getElementById('saveThresholdsBtn').addEventListener('click', () => {
-
-                const payload = {
-
-                    aman: parseInt(document.getElementById('thresholdAman').value),
-
-                    siaga: parseInt(document.getElementById('thresholdSiaga').value),
-
-                    bahaya: parseInt(document.getElementById('thresholdBahaya').value)
-
-                };
-
-                client.publish('ews/banjir/threshold/set', JSON.stringify(payload));
-
-                alert('Mengirim permintaan pengaturan batas ke ESP32...');
-
-            });
-
-
-
-            function updateThresholdUI(data) {
-
-                document.getElementById('thresholdAman').value = data.aman;
-
-                document.getElementById('thresholdSiaga').value = data.siaga;
-
-                document.getElementById('thresholdBahaya').value = data.bahaya;
-
-
-
-                document.getElementById('labelAman').textContent = `Aman (< ${data.aman})`;
-
-                document.getElementById('labelSiaga').textContent = `Siaga (${data.aman}-${data.siaga})`;
-
-                document.getElementById('labelBahaya').textContent = `Bahaya (> ${data.siaga})`;
-
-                document.getElementById('labelMaxScale').textContent = `${data.bahaya} cm (Max)`;
-
-
-
-                waterChart.options.scales.y.max = data.bahaya;
-
-                waterChart.update('none');
-
-            }
-
-
-
-            // Tabs Logic
-
-            const navOverviewBtn = document.getElementById('navOverviewBtn');
-
-            const navMqttConfigBtn = document.getElementById('navMqttConfigBtn');
-
-            const viewOverview = document.getElementById('viewOverview');
-
-            const viewMqttConfig = document.getElementById('viewMqttConfig');
-
-
-
-            navOverviewBtn.addEventListener('click', () => {
-
-                viewOverview.classList.remove('hidden'); viewOverview.classList.add('flex');
-
-                viewMqttConfig.classList.add('hidden'); viewMqttConfig.classList.remove('flex');
-
-                navOverviewBtn.classList.replace('text-secondary', 'bg-secondary-fixed');
-
-                navOverviewBtn.classList.add('text-on-secondary-fixed');
-
-                navMqttConfigBtn.classList.replace('bg-secondary-fixed', 'text-secondary');
-
-                navMqttConfigBtn.classList.remove('text-on-secondary-fixed');
-
-            });
-
-
-
-            navMqttConfigBtn.addEventListener('click', () => {
-
-                viewOverview.classList.add('hidden'); viewOverview.classList.remove('flex');
-
-                viewMqttConfig.classList.remove('hidden'); viewMqttConfig.classList.add('flex');
-
-                navMqttConfigBtn.classList.replace('text-secondary', 'bg-secondary-fixed');
-
-                navMqttConfigBtn.classList.add('text-on-secondary-fixed');
-
-                navOverviewBtn.classList.replace('bg-secondary-fixed', 'text-secondary');
-
-                navOverviewBtn.classList.remove('text-on-secondary-fixed');
-
-            });
-
-        });
-
-    </script>
-
+    <audio id="alertSound" preload="auto" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"></audio>
+
+    <!-- SideNavBar (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-[260px] py-stack-lg px-base bg-white border-r border-outline-variant shadow-md z-40">
+        <div class="mb-8 px-4 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold font-headline-md text-headline-md shadow-sm">HS</div>
+            <div>
+                <h1 class="text-headline-md font-headline-md font-bold text-primary truncate">HydroSense Pro</h1>
+                <p class="text-label-md font-label-md text-secondary truncate">Station 01</p>
+            </div>
+        </div>
+        <div class="flex-1 flex flex-col gap-2">
+            <a class="flex items-center gap-3 px-4 py-3 bg-secondary-fixed text-on-secondary-fixed rounded-lg transition-all text-label-md font-label-md group cursor-pointer" id="navOverviewBtn">
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                <span>Overview</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-surface-container transition-all rounded-lg text-label-md font-label-md group cursor-pointer" id="navMqttConfigBtn">
+                <span class="material-symbols-outlined text-[20px]">settings_input_component</span>
+                <span>MQTT Config</span>
+            </a>
+        </div>
+        <div class="mt-auto flex flex-col gap-2 pt-4 border-t border-outline-variant">
+            <button class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-label-md text-label-md hover:opacity-90 shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">download</span> Export Data
+            </button>
+        </div>
+    </nav>
+
+    <!-- TopAppBar -->
+    <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-16 bg-surface border-b border-outline-variant shadow-sm lg:pl-[292px]">
+        <div class="flex items-center gap-2 lg:hidden">
+            <span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+            <h1 class="text-headline-md font-headline-md font-extrabold text-primary truncate">HydroSense Pro</h1>
+        </div>
+        <div class="hidden lg:flex flex-col">
+            <h2 class="text-headline-md font-headline-md font-semibold text-on-surface">Water Level Monitoring System</h2>
+            <p class="text-label-md font-label-md text-secondary">Realtime Monitoring via ESP32 &amp; HiveMQ</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-outline-variant shadow-sm">
+                <div class="relative flex h-3 w-3">
+                    <span id="connPulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
+                    <span id="connDot" class="relative inline-flex rounded-full h-3 w-3 bg-[#10b981]"></span>
+                </div>
+                <span id="connText" class="text-label-sm font-label-sm text-secondary uppercase tracking-wider">Connecting...</span>
+            </div>
+            <button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container" id="muteToggle" title="Mute/Unmute Alert Sound">
+                <span class="material-symbols-outlined" id="muteIcon">volume_up</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Canvas -->
+    <main class="flex-1 w-full pt-20 pb-24 lg:pb-8 px-4 lg:px-8 lg:ml-[260px] max-w-[1600px] mx-auto">
+        <div class="flex flex-col gap-gutter w-full" id="viewOverview">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+                <!-- Current Water Level Card -->
+                <div class="col-span-1 md:col-span-8 bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-6 z-10 relative">
+                        <div>
+                            <h3 class="text-body-md font-body-md text-secondary font-medium">Current Water Level</h3>
+                            <p class="text-label-sm font-label-sm text-outline mt-1">Sensor: Mini Lidar TOF VL53L0X</p>
+                        </div>
+                        <span class="material-symbols-outlined text-outline-variant">waves</span>
+                    </div>
+                    <div class="flex-1 flex flex-col lg:flex-row items-center justify-center gap-8 z-10 relative">
+                        <div class="text-center lg:text-left flex flex-col items-center lg:items-start">
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-[72px] lg:text-[96px] leading-none font-headline-xl font-bold text-primary tracking-tighter" id="currentLevelDisplay">0</span>
+                                <span class="text-headline-md font-headline-md text-secondary font-semibold">cm</span>
+                            </div>
+                        </div>
+                        <div class="w-full max-w-[300px] flex flex-col gap-2">
+                            <div class="flex justify-between text-label-sm font-label-sm text-secondary">
+                                <span>0 cm</span>
+                                <span id="labelMaxScale">200 cm (Max)</span>
+                            </div>
+                            <div class="h-6 w-full bg-surface-container rounded-full overflow-hidden relative shadow-inner">
+                                <div class="h-full bg-primary-container rounded-full transition-all duration-1000 ease-in-out w-[0%] relative overflow-hidden" id="levelProgressBar">
+                                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-label-sm font-label-sm mt-1">
+                                <span class="text-[#10b981] font-semibold" id="labelAman">Aman (< 100)</span>
+                                <span class="text-[#f59e0b] font-semibold" id="labelSiaga">Siaga (100-150)</span>
+                                <span class="text-error font-semibold" id="labelBahaya">Bahaya (> 150)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Status Card -->
+                <div class="col-span-1 md:col-span-4 bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col justify-between">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-body-md font-body-md text-secondary font-medium">System Status</h3>
+                        <span class="material-symbols-outlined text-outline-variant">info</span>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center justify-center text-center">
+                        <div class="w-24 h-24 rounded-full bg-[#10b981]/10 flex items-center justify-center mb-4" id="systemStatusIconBg">
+                            <span class="material-symbols-outlined text-[48px] text-[#10b981]" id="systemStatusIcon" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        </div>
+                        <h4 class="text-headline-lg font-headline-lg text-[#10b981]" id="systemStatusText">Aman</h4>
+                        <p class="text-body-sm font-body-sm text-secondary mt-2" id="systemStatusDesc">Waiting for sensor data...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+                <!-- Realtime Chart -->
+                <div class="col-span-1 lg:col-span-2 bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col h-[400px]">
+                    <div class="flex justify-between items-center mb-4 pb-4 border-b border-surface-container">
+                        <div>
+                            <h3 class="text-body-md font-body-md text-on-surface font-semibold">Live Telemetry</h3>
+                            <p class="text-label-sm font-label-sm text-secondary">Historical level</p>
+                        </div>
+                    </div>
+                    <div class="flex-1 w-full relative">
+                        <canvas id="waterLevelChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Threshold Settings -->
+                <div class="col-span-1 bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col">
+                    <div class="flex justify-between items-center mb-6 pb-4 border-b border-surface-container">
+                        <h3 class="text-body-md font-body-md text-on-surface font-semibold">Threshold Settings</h3>
+                        <span class="material-symbols-outlined text-outline-variant">tune</span>
+                    </div>
+                    <form class="flex-1 flex flex-col gap-5">
+                        <div class="relative">
+                            <label class="block text-label-md font-label-md text-secondary mb-1">Aman (Safe) Max (cm)</label>
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 w-3 h-3 rounded-full bg-[#10b981]"></span>
+                                <input class="block w-full pl-9 pr-12 py-2 border rounded-lg focus:ring-4 focus:ring-primary/20 focus:border-primary" id="thresholdAman" type="number" value="100"/>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-label-md font-label-md text-secondary mb-1">Siaga (Warning) Max (cm)</label>
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 w-3 h-3 rounded-full bg-[#f59e0b]"></span>
+                                <input class="block w-full pl-9 pr-12 py-2 border rounded-lg focus:ring-4 focus:ring-primary/20 focus:border-primary" id="thresholdSiaga" type="number" value="150"/>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-label-md font-label-md text-secondary mb-1">Bahaya (Danger) Limit (cm)</label>
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 w-3 h-3 rounded-full bg-error"></span>
+                                <input class="block w-full pl-9 pr-12 py-2 border rounded-lg focus:ring-4 focus:ring-primary/20 focus:border-primary" id="thresholdBahaya" type="number" value="200"/>
+                            </div>
+                        </div>
+                        <button class="mt-auto w-full flex justify-center items-center gap-2 bg-[#2563EB] text-white py-2.5 px-4 rounded-lg font-medium hover:bg-primary-fixed-variant shadow-sm" id="saveThresholdsBtn" type="button">
+                            <span class="material-symbols-outlined text-[18px]">save</span> Save Thresholds
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- MQTT Config View -->
+        <div class="hidden flex-col gap-gutter w-full max-w-2xl mx-auto" id="viewMqttConfig">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-[#F1F5F9] flex flex-col">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-surface-container">
+                    <h3 class="text-body-md font-body-md text-on-surface font-semibold">MQTT Configuration</h3>
+                    <span class="material-symbols-outlined text-outline-variant">settings_input_component</span>
+                </div>
+                <div class="p-4 bg-surface-container rounded text-body-sm text-secondary">
+                    <b>Note:</b> Kredensial hardcoded pada index.html. Untuk produksi, mohon pindahkan ke ENV atau sisi server.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 shadow-sm bg-white pb-safe">
+        <a class="flex flex-col items-center justify-center text-primary rounded-full p-2 min-w-[64px]" href="#">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+        </a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Audio setup
+            const alertSound = document.getElementById('alertSound');
+            const muteToggle = document.getElementById('muteToggle');
+            const muteIcon = document.getElementById('muteIcon');
+            let isMuted = false;
+            let bahayaStateActive = false;
+
+            muteToggle.addEventListener('click', () => {
+                isMuted = !isMuted;
+                muteIcon.textContent = isMuted ? 'volume_off' : 'volume_up';
+                if (isMuted) alertSound.pause();
+            });
+
+            // Koneksi MQTT Websocket
+            const brokerUrl = 'wss://88534bafaf374fcfaa67af7757feb0fa.s1.eu.hivemq.cloud:8884/mqtt';
+            const mqttOptions = {
+                clientId: 'web_client_' + Math.random().toString(16).substr(2, 8),
+                username: 'esp32_ews',
+                password: 'ewsbanjir123',
+                clean: true,
+                reconnectPeriod: 5000,
+            };
+
+            const client = mqtt.connect(brokerUrl, mqttOptions);
+            const connText = document.getElementById('connText');
+            const connPulse = document.getElementById('connPulse');
+            const connDot = document.getElementById('connDot');
+
+            // Setup Chart.js
+            const ctx = document.getElementById('waterLevelChart').getContext('2d');
+            const initialData = Array(30).fill(0);
+            const labels = Array.from({length: 30}, (_, i) => `-${30-i}s`);
+
+            const waterChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Water Level (cm)',
+                        data: initialData,
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { min: 0, max: 200 }
+                    }
+                }
+            });
+
+            // MQTT Logic
+            client.on('connect', () => {
+                console.log('Terhubung ke HiveMQ Cloud!');
+                connText.textContent = 'Connected';
+                connText.className = 'text-label-sm font-label-sm text-[#10b981] uppercase tracking-wider';
+                connPulse.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75';
+                connDot.className = 'relative inline-flex rounded-full h-3 w-3 bg-[#10b981]';
+                
+                client.subscribe('ews/banjir/level');
+                client.subscribe('ews/banjir/threshold/state');
+            });
+
+            client.on('error', (err) => {
+                console.error('MQTT Error:', err);
+                connText.textContent = 'Error';
+                connPulse.className = 'hidden';
+                connDot.className = 'relative inline-flex rounded-full h-3 w-3 bg-error';
+            });
+
+            client.on('message', (topic, message) => {
+                try {
+                    const payload = JSON.parse(message.toString());
+                    if (topic === 'ews/banjir/level') {
+                        updateDashboardUI(payload);
+                    } else if (topic === 'ews/banjir/threshold/state') {
+                        updateThresholdUI(payload);
+                    }
+                } catch(e) {
+                    console.error("Parse error", e);
+                }
+            });
+
+            function updateDashboardUI(data) {
+                const level = data.level;
+                const bahayaVal = data.bahaya;
+                const siagaVal = data.siaga;
+                
+                document.getElementById('currentLevelDisplay').innerText = level;
+
+                waterChart.data.datasets[0].data.shift();
+                waterChart.data.datasets[0].data.push(level);
+                let d = new Date();
+                waterChart.data.labels.shift();
+                waterChart.data.labels.push(`${d.getHours()}:${d.getMinutes() < 10 ? '0' : ''}${d.getMinutes()}:${d.getSeconds()}`);
+                waterChart.update('none');
+
+                let percentage = (level / bahayaVal) * 100;
+                const bar = document.getElementById('levelProgressBar');
+                bar.style.width = `${Math.min(percentage, 100)}%`;
+
+                const iconBg = document.getElementById('systemStatusIconBg');
+                const icon = document.getElementById('systemStatusIcon');
+                const text = document.getElementById('systemStatusText');
+                const desc = document.getElementById('systemStatusDesc');
+
+                if (level >= bahayaVal) {
+                    bar.className = 'h-full bg-error rounded-full transition-all duration-1000 w-full relative overflow-hidden';
+                    iconBg.className = 'w-24 h-24 rounded-full bg-error/10 flex items-center justify-center mb-4 animate-pulse';
+                    icon.className = 'material-symbols-outlined text-[48px] text-error';
+                    icon.textContent = 'warning';
+                    text.className = 'text-headline-lg font-headline-lg text-error';
+                    text.textContent = 'Bahaya';
+                    desc.textContent = 'Kritis: Level air melebihi batas bahaya!';
+
+                    if (!bahayaStateActive && !isMuted) {
+                        bahayaStateActive = true;
+                        alertSound.play().catch(e => console.log('Audio butuh interaksi user pertama kali'));
+                    }
+                } else if (level >= siagaVal) {
+                    bar.className = 'h-full bg-[#f59e0b] rounded-full transition-all duration-1000 w-full relative overflow-hidden';
+                    iconBg.className = 'w-24 h-24 rounded-full bg-[#f59e0b]/10 flex items-center justify-center mb-4';
+                    icon.className = 'material-symbols-outlined text-[48px] text-[#f59e0b]';
+                    icon.textContent = 'error';
+                    text.className = 'text-headline-lg font-headline-lg text-[#f59e0b]';
+                    text.textContent = 'Siaga';
+                    desc.textContent = 'Peringatan: Level air naik mendekati batas bahaya.';
+                    
+                    bahayaStateActive = false;
+                    alertSound.pause();
+                } else {
+                    bar.className = 'h-full bg-primary-container rounded-full transition-all duration-1000 w-full relative overflow-hidden';
+                    iconBg.className = 'w-24 h-24 rounded-full bg-[#10b981]/10 flex items-center justify-center mb-4';
+                    icon.className = 'material-symbols-outlined text-[48px] text-[#10b981]';
+                    icon.textContent = 'check_circle';
+                    text.className = 'text-headline-lg font-headline-lg text-[#10b981]';
+                    text.textContent = 'Aman';
+                    desc.textContent = 'Semua sistem normal. Level air dalam batas aman.';
+                    
+                    bahayaStateActive = false;
+                    alertSound.pause();
+                }
+            }
+
+            document.getElementById('saveThresholdsBtn').addEventListener('click', () => {
+                const payload = {
+                    aman: parseInt(document.getElementById('thresholdAman').value),
+                    siaga: parseInt(document.getElementById('thresholdSiaga').value),
+                    bahaya: parseInt(document.getElementById('thresholdBahaya').value)
+                };
+                client.publish('ews/banjir/threshold/set', JSON.stringify(payload));
+                alert('Mengirim permintaan pengaturan batas ke ESP32...');
+            });
+
+            function updateThresholdUI(data) {
+                document.getElementById('thresholdAman').value = data.aman;
+                document.getElementById('thresholdSiaga').value = data.siaga;
+                document.getElementById('thresholdBahaya').value = data.bahaya;
+                
+                document.getElementById('labelAman').textContent = `Aman (< ${data.aman})`;
+                document.getElementById('labelSiaga').textContent = `Siaga (${data.aman}-${data.siaga})`;
+                document.getElementById('labelBahaya').textContent = `Bahaya (> ${data.siaga})`;
+                document.getElementById('labelMaxScale').textContent = `${data.bahaya} cm (Max)`;
+
+                waterChart.options.scales.y.max = data.bahaya;
+                waterChart.update('none');
+            }
+
+            // Tabs Logic
+            const navOverviewBtn = document.getElementById('navOverviewBtn');
+            const navMqttConfigBtn = document.getElementById('navMqttConfigBtn');
+            const viewOverview = document.getElementById('viewOverview');
+            const viewMqttConfig = document.getElementById('viewMqttConfig');
+
+            navOverviewBtn.addEventListener('click', () => {
+                viewOverview.classList.remove('hidden'); viewOverview.classList.add('flex');
+                viewMqttConfig.classList.add('hidden'); viewMqttConfig.classList.remove('flex');
+                navOverviewBtn.classList.replace('text-secondary', 'bg-secondary-fixed');
+                navOverviewBtn.classList.add('text-on-secondary-fixed');
+                navMqttConfigBtn.classList.replace('bg-secondary-fixed', 'text-secondary');
+                navMqttConfigBtn.classList.remove('text-on-secondary-fixed');
+            });
+
+            navMqttConfigBtn.addEventListener('click', () => {
+                viewOverview.classList.add('hidden'); viewOverview.classList.remove('flex');
+                viewMqttConfig.classList.remove('hidden'); viewMqttConfig.classList.add('flex');
+                navMqttConfigBtn.classList.replace('text-secondary', 'bg-secondary-fixed');
+                navMqttConfigBtn.classList.add('text-on-secondary-fixed');
+                navOverviewBtn.classList.replace('bg-secondary-fixed', 'text-secondary');
+                navOverviewBtn.classList.remove('text-on-secondary-fixed');
+            });
+        });
+    </script>
 </body>
-
 </html>
